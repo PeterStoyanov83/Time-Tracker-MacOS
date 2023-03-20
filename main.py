@@ -3,7 +3,7 @@ import subprocess
 from datetime import datetime, timedelta, time
 from os import name
 
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox,
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
 from PyQt5.QtCore import QTimer, pyqtSignal, pyqtSlot
 
 import sqlite3
