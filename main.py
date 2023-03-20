@@ -3,10 +3,11 @@ import subprocess
 from datetime import datetime, timedelta, time
 from os import name
 
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox,
 from PyQt5.QtCore import QTimer, pyqtSignal, pyqtSlot
+
 import sqlite3
-from rumps import rumps
+import rumps
 
 
 def init_db():
@@ -123,8 +124,8 @@ class LunchReminderWindow(QWidget):
 
 
 class TimeTrackerApp(rumps.App):
-    def init(self):
-        super().init("Time Tracker", icon="icon.png")
+    def __init__(self):
+        super().__init__("Time Tracker", icon="icon.png")
         self.logged_in = False
         self.login_window = None
         self.worked_time_window = None
@@ -198,10 +199,23 @@ class TimeTrackerApp(rumps.App):
             remaining_time = timedelta(0)
 
         if now.time() == self.lunch_reminder_time:
-            subprocess.call(["afplay[/System/Library/Sounds/Ping.aiff"])
+            subprocess.call(["afplay", "/System/Library/Sounds/Ping.aiff"])
+
+        if self.logged_in:
+            remaining_time_str = str(remaining_time).split('.')[0]
+            self.title = f"Time Tracker - {remaining_time_str}"
+            self.menu = [self.login_item, self.logout_item, self.change_user_item, self.set_lunch_reminder_item,
+                         rumps.MenuItem(title=remaining_time_str)]
+        else:
+            self.title = "Time Tracker"
+            self.menu = [self.login_item, self.set_lunch_reminder_item]
+
+    def run(self):
+        self.init()
+        super().run()
 
 
-if name == 'main':
+if __name__ == '__main__':
     app = QApplication(sys.argv)
     time_tracker_app = TimeTrackerApp()
     time_tracker_app.run()
